@@ -27,6 +27,7 @@ APVU: se a vítima está alerta (A), responde a estímulos de voz (V), de dor (P
 GCS: de 3 a 15, quanto menor o valor, menos grave a situação da vítima 
 [Ver escala](https://pt.wikipedia.org/wiki/Escala_de_coma_de_Glasgow#/media/Ficheiro:Escala_de_Coma_de_Glasgow_-_ECG.png)
 </small>
+
 ---
 
 ## Probabilidade de Sobrevivência
