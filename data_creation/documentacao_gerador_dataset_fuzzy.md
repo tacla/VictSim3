@@ -11,7 +11,7 @@
 | fr                      | Frequência respiratória (rpm) de 0 a 45                     |
 | pas                     | Pressão arterial sistólica (mmHg)                           |
 | spo2                    | Saturação de oxigênio (%)   de 0 a 100                      |
-| gcs                     | Escala de Coma de Glasgow (3–15)                            |
+| gcs                     | [Escala de Coma de Glasgow (3–15)](https://pt.wikipedia.org/wiki/Escala_de_coma_de_Glasgow) |
 | avpu                    | Estado de consciência: A, V, P, U (Alerta, Voz, Pain (dor), inconsciente |
 | temp                    | Temperatura corporal (°C)  de 0 a 38.5                      |
 | pr                      | pulso radial: 'S' ou 'N'                                    |
