@@ -7,19 +7,21 @@
 | Variável                 | Descrição                                                   |
 |--------------------------|-------------------------------------------------------------|
 | idade                   | Idade da vítima (entre 1 e 90 anos)                         |
-| fc                      | Frequência cardíaca (bpm)                                   |
-| fr                      | Frequência respiratória (rpm)                               |
+| fc                      | Frequência cardíaca (bpm) de 0 a 160                        |
+| fr                      | Frequência respiratória (rpm) de 0 a 45                     |
 | pas                     | Pressão arterial sistólica (mmHg)                           |
-| spo2                    | Saturação de oxigênio (%)                                   |
+| spo2                    | Saturação de oxigênio (%)   de 0 a 100                      |
 | gcs                     | Escala de Coma de Glasgow (3–15)                            |
-| avpu                    | Estado de consciência: A, V, P, U (                         |
-| temp                    | Temperatura corporal (°C)                                   |
+| avpu                    | Estado de consciência: A, V, P, U (Alerta, Voz, Pain (dor), |
+|                         |     inconsciente                                            |
+| temp                    | Temperatura corporal (°C)  de 0 a 38.5                      |
 | pr                      | pulso radial: 'S' ou 'N'                                    |
 | sg                      | sangramento: 'N': não, 'L': leve, 'M': moderado, 'G': grave |
 | fx                      | fratura exposta: 'S' ou 'N'                                 |
 | queim                   | queimadura: 'N': não, 'L': leve, 'M': moderado, 'G': grave  |
-| tri                     | Classif. START: "verde", "amarelo", "vermelho", "preto"     |
-| sobr                    | Prob. de sobrevivência (0 a 1)                              |
+| tri                     | Triagem classif. START: "verde", "amarelo", "vermelho",     |
+|                         |    "preto"                                                  |
+| sobr                    | Prob. de sobrevivência (0 a 1)  contínuo                    |
 
 APVU: se a vítima está alerta (A), responde a estímulos de voz (V), de dor (P) ou se está inconsciente (U).
 
