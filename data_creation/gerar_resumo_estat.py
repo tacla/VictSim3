@@ -46,12 +46,13 @@ OUTPUT_MD   = BASE_FOLDER / "summary.md"
 
 # Esquema conhecido (ordem preservada nos conjuntos)
 CAT_DOMAINS = {
-    "avpu":  ["A", "V", "P", "U"],
+
     "pr":    ["S", "N"],
-    "sg":    ["N", "L", "M", "G"],
     "queim": ["N", "L", "M", "G"],
     "fx":    ["S", "N"],
-    "tri":   ["verde", "amarelo", "vermelho", "preto"],  # ordem customizada
+    "sg":    ["N", "L", "M", "G"],
+    "avpu":  ["A", "V", "P", "U"],
+    "tri":   ["verde", "amarelo", "vermelho", "preto"],  
 }
 
 NUM_INT_COLS   = ["idade", "fc", "fr", "pas", "spo2", "gcs"]
@@ -174,3 +175,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
