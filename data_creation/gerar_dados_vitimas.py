@@ -1,3 +1,41 @@
+"""
+=====================================================================
+Gerador de dataset sintético de vítimas 
+=====================================================================
+
+Funcionalidade:
+---------------
+cria um conjunto de dados representando vítimas de diferentes tipos de acidentes (aéreo, rodoviário,
+ferroviário, deslizamento), atribuindo a cada vítima:
+- Idade
+- Sinais vitais (frequência cardíaca, respiratória, pressão arterial sistólica, saturação de oxigênio, temperatura)
+- Pulso radial (PR)
+- Grau de sangramento (SG)
+- Presença de fratura (FX)
+- Grau de queimadura (QUEIM)
+- Escala de coma de Glasgow (GCS)
+- Estado de consciência (AVPU)
+- Classe de triagem (TRI)
+- Probabilidade de sobrevivência (SOBR)
+
+Os valores são gerados de forma aleatória controlada, com base em faixas e distribuições associadas a cada classe de triagem.
+O programa ainda:
+1. Salva o dataset gerado como arquivo CSV (`dataset_vitimas.csv`);
+2. Exibe no console a contagem de vítimas por classe de triagem;
+3. Gera um histograma percentual da probabilidade de sobrevivência.
+
+Como usar:
+----------
+1.  Configure:
+   - `n_vitimas`     → número total de registros no dataset;
+   - `media_idade`   → idade média das vítimas;
+   - `desvio_idade`  → desvio padrão da idade;
+   - `tipo_acidente` → tipo de acidente (aereo, rodoviario, ferroviario, deslizamento).
+3. Ao executar, o arquivo `dataset_vitimas.csv` será salvo no diretório atual.
+4. O histograma será exibido em uma janela gráfica via matplotlib.
+=====================================================================
+"""
+
 import numpy as np
 import pandas as pd
 import random
@@ -99,21 +137,21 @@ def gerar_dataset_vitimas(n_vitimas=100, media_idade=35, desvio_idade=7, tipo_ac
             'fr': np.random.randint(*params['fr']) if params['fr'] != (0, 0) else 0,    # freq. respiratoria
             'pas': np.random.randint(*params['pas']) if params['pas'] != (0, 0) else 0, # pressao art. sistolica
             'spo2': np.random.randint(*params['spo2']),                  # saturacao de oxigenio
-            'gcs': gcs_value,                                            # Glasgow Comma Scale
-            'avpu': random.choice(params['avpu']),                       # alerta, voz, dor (pain), inconsciente
             'temp': round(np.random.uniform(*params['temp']), 1),        # temperatura em Celsius
             'pr': random.choice(params['pr']),                           # pulso radial
             'sg': random.choice(params['sg']),                           # sangramento: Nao, Leve, Moderado, Grave
             'fx': random.choice(params['fx']),                           # fratura
             'queim': random.choice(params['queim']),                     # queimadura: Nao, Leve, Moderada, Grave
+            'gcs': gcs_value,                                            # Glasgow Comma Scale
+            'avpu': random.choice(params['avpu']),                       # alerta, voz, dor (pain), inconsciente
             'tri': tri,                                                  # classe de triagem
             'sobr': round(np.random.uniform(*faixas_fuzzy[tri]), 2)      # prob. de sobrevivencia
         }
         dados.append(registro)
 
     df = pd.DataFrame(dados)
-    df.to_csv("dataset_vitimas.csv", index=False)
-    print("\nDataset salvo como dataset_vitimas.csv")
+    df.to_csv("data.csv", index=False)
+    print("\nDataset salvo como data.csv")
 
     contagem = Counter(df['tri'])
     print("\nNumero de vitimas por classificacao START:")
