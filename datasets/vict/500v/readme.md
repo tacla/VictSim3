@@ -1,0 +1,1 @@
+Reservado para comentários sobre 500 vítimas.
