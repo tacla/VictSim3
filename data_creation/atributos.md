@@ -21,8 +21,12 @@
 | 13 | tri      | Triagem classif. START: "verde", "amarelo", "vermelho", "preto" | CAT |
 | 14 | sobr     | Prob. de sobrevivência (0 a 1)  REAL                    | FLOAT |
 
+<small>
 APVU: se a vítima está alerta (A), responde a estímulos de voz (V), de dor (P) ou se está inconsciente (U).
-GCS: de 3 a 15, quanto menor o valor, menos grave a situação da vítima [escala](https://pt.wikipedia.org/wiki/Ficheiro:Escala_de_Coma_de_Glasgow_-_ECG.pnghttps://pt.wikipedia.org/wiki/Ficheiro:Escala_de_Coma_de_Glasgow_-_ECG.png)
+
+GCS: de 3 a 15, quanto menor o valor, menos grave a situação da vítima 
+[escala](https://pt.wikipedia.org/wiki/Escala_de_coma_de_Glasgow#/media/Ficheiro:Escala_de_Coma_de_Glasgow_-_ECG.png)
+</small>
 ---
 
 ## Probabilidade de Sobrevivência
