@@ -28,12 +28,12 @@ APVU: se a vítima está alerta (A), responde a estímulos de voz (V), de dor (P
 ## Probabilidade de Sobrevivência
 
 
-| Classificação START | Faixa fuzzy da probabilidade de sobrevivência |
-|---------------------|-----------------------------------------------|
-| Verde               | [0.93 – 1.00]                                 |
-| Amarelo             | [0.75 – 0.95]                                 |
-| Vermelho            | [0.15 – 0.80]                                 |
-| Preto               | [0.00 – 0.25]                                 |
+| Classificação START | Faixa de probabilidade de sobrevivência |
+|---------------------|-----------------------------------------|
+| Verde               | [0.93 – 1.00]                           |
+| Amarelo             | [0.75 – 0.95]                           |
+| Vermelho            | [0.15 – 0.80]                           |
+| Preto               | [0.00 – 0.25]                           |
 
 
 ---
