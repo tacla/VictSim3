@@ -1,7 +1,7 @@
 # VictSim3
 Simulador de acidentes com vítimas em uma grade 2D.
 
-Pastas:
-* <b>data_creation<\b>: programas para gerar datasets.
-* data_visualization: programas para visulizar datasets.
-* datasets: datasets para serem utilizados em treinamento/validação e/ou testes cegos.
+<i>Pastas</i>:
+* <b>data_creation</b>: programas para gerar datasets.
+* <b>data_visualization</b>: programas para visualizar datasets.
+* <b>datasets</b>: datasets para serem utilizados em treinamento/validação e/ou testes cegos.
