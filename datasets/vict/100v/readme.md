@@ -1,5 +1,6 @@
 # Conteúdos
 data.csv: o conjunto de dados
+
 demais pastas: mostram as relações entre as variáveis (features).
 
 # Resumo do CSV
@@ -62,4 +63,5 @@ demais pastas: mostram as relações entre as variáveis (features).
 | amarelo  |         25 | 25.00% |
 | vermelho |         38 | 38.00% |
 | preto    |          9 | 9.00%  |
+
 
