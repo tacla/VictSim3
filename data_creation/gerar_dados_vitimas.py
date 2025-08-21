@@ -46,75 +46,77 @@ def gerar_dataset_vitimas(n_vitimas=100, media_idade=35, desvio_idade=7, tipo_ac
     np.random.seed(42)
     random.seed(42)
 
-    distribuicoes_por_tipo = {
-        'aereo': {'verde': 0.2, 'amarelo': 0.3, 'vermelho': 0.4, 'preto': 0.1},
-        'rodoviario': {'verde': 0.4, 'amarelo': 0.3, 'vermelho': 0.2, 'preto': 0.1},
-        'ferroviario': {'verde': 0.3, 'amarelo': 0.3, 'vermelho': 0.3, 'preto': 0.1},
-        'deslizamento': {'verde': 0.25, 'amarelo': 0.25, 'vermelho': 0.3, 'preto': 0.2}
+    # distribuicao de triagem (START) por tipo de acidente
+    # 0: verde, 1: amarelo, 2: vermelho, 3: preto
+    dist_tri_por_tipo = {
+        'aereo': {0: 0.2, 1: 0.3, 2: 0.4, 3: 0.1},
+        'rodoviario': {0: 0.4, 1: 0.3, 2: 0.2, 3: 0.1},
+        'ferroviario': {0: 0.3, 1: 0.3, 2: 0.3, 3: 0.1},
+        'deslizamento': {0: 0.25, 1: 0.25, 2: 0.3, 3: 0.2}
     }
 
     faixas_fuzzy = {
-        'verde': (0.93, 1.00),          # baixa - lesoes leves        
-        'amarelo': (0.75, 0.95),        # media - atendimento rapido
-        'vermelho': (0.15, 0.80),       # critica - atendimento imediato
-        'preto': (0.00, 0.25)           # sem prioridade - obito ou lesoes incompativeis com a vida
+        0: (0.93, 1.00),          # baixa - lesoes leves        
+        1: (0.75, 0.95),          # media - atendimento rapido
+        2: (0.15, 0.80),          # critica - atendimento imediato
+        3: (0.00, 0.25)           # sem prioridade - obito ou lesoes incompativeis com a vida
     }
 
     triagem_parametros = {
-        'verde': {
+        0: {
             'fc': (60, 100),
             'fr': (12, 20),
             'pas': (110, 130),
             'spo2': (96, 100),
             'gcs': (15, 15),
-            'avpu': ['A'],
+            'avpu': [0],
             'temp': (36.5, 37.4),
-            'pr': ['S'],
-            'sg': ['N'],
-            'fx': ['S'],
-            'queim': ['N']
+            'pr': [1],
+            'sg': [0],
+            'fx': [1],
+            'queim': [0]
         },
-        'amarelo': {
+        1: {
             'fc': (100, 120),
             'fr': (20, 30),
             'pas': (90, 110),
             'spo2': (90, 95),
             'gcs': (13, 14),
-            'avpu': ['A', 'V'],
+            'avpu': [0, 1],
             'temp': (37.0, 38.5),
-            'pr': ['S', 'N'],
-            'sg': ['L', 'M'],
-            'fx': ['N', 'S'],
-            'queim': ['N'] * 85 + ['L'] * 10 + ['M'] * 5
+            'pr': [1, 0],
+            'sg': [1, 2],
+            'fx': [0, 1],
+            'queim': [0] * 85 + [1] * 10 + [2] * 5
         },
-        'vermelho': {
+        2: {
             'fc': (121, 160),
             'fr': (31, 45),
             'pas': (60, 89),
             'spo2': (75, 89),
             'gcs': (9, 12),
-            'avpu': ['P'],
+            'avpu': [2],
             'temp': (34.0, 35.0),
-            'pr': ['N'],
-            'sg': ['G'],
-            'fx': ['S'],
-            'queim': ['N'] * 40 + ['M'] * 30 + ['G'] * 30
+            'pr': [0],
+            'sg': [3],
+            'fx': [1],
+            'queim': [0] * 40 + [2] * 30 + [3] * 30
         },
-        'preto': {
+        3: {
             'fc': (0, 0),
             'fr': (0, 0),
             'pas': (0, 0),
             'spo2': (0, 74),
             'gcs': (3, 6),
-            'avpu': ['U'],
-            'temp': (25.0, 34.0), 'pr': ['N'],
-            'sg': ['G'],
-            'fx': ['S', 'N'],
-            'queim': ['N'] * 50 + ['G'] * 50
+            'avpu': [3],
+            'temp': (25.0, 34.0), 'pr': [0],
+            'sg': [3],
+            'fx': [1, 0],
+            'queim': [0] * 50 + [3] * 50
         }
     }
 
-    distrib = distribuicoes_por_tipo[tipo_acidente]
+    distrib = dist_tri_por_tipo[tipo_acidente]
     classificacoes = np.random.choice(
         list(distrib.keys()),
         size=n_vitimas,
@@ -153,14 +155,18 @@ def gerar_dataset_vitimas(n_vitimas=100, media_idade=35, desvio_idade=7, tipo_ac
     df.to_csv("data.csv", index=False)
     print("\nDataset salvo como data.csv")
 
+    # Mapeamento de tri para cores
+    cores = {0: 'verde', 1: 'amarelo', 2: 'vermelho', 3: 'preto'}
+
     contagem = Counter(df['tri'])
-    print("\nNumero de vitimas por classificacao START:")
-    for k, v in contagem.items():
-        print(f"  {k.capitalize()}: {v}")
+    print("\nNúmero de vítimas por classificação START:")
+
+    for k in sorted(contagem.keys()):
+        print(f"  {k} ({cores[k]}): {contagem[k]}")
 
     plt.figure(figsize=(8, 5))
     plt.hist(df['sobr'], bins=10, color='skyblue', edgecolor='black', weights=np.ones(n_vitimas) / n_vitimas)
-    plt.title('Distribuicao percentual da probabilidade de sobreviivencia')
+    plt.title('Distribuicao percentual da probabilidade de sobrevivencia')
     plt.xlabel('Probabilidade de Sobrevivencia')
     plt.ylabel('% de Vitimas')
     plt.gca().yaxis.set_major_formatter(plt.matplotlib.ticker.PercentFormatter(1))
