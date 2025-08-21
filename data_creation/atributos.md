@@ -12,13 +12,13 @@
 |  4 | pas      | Pressão arterial sistólica (mmHg)                     | INT    |                  
 |  5 | spo2     | Saturação de oxigênio (%)   de 0 a 100                | INT    |     
 |  6 | temp     | Temperatura corporal (°C)  de 0 a 38.5                | FLOAT  |
-|  7 | pr       | pulso radial: 'S' ou 'N'                              | CAT    |
-|  8 | sg       | sangramento: 'N': não, 'L': leve, 'M': moderado, 'G': grave | CAT |
-|  9 | fx       | fratura exposta: 'S' ou 'N'                                 | CAT |
-| 10 | queim    | queimadura: 'N': não, 'L': leve, 'M': moderado, 'G': grave  | CAT |
+|  7 | pr       | pulso radial: 0 (NÃO), 1 (SIM)                        | INT    |
+|  8 | sg       | sangramento: 0 (NÃO), 1 (LEVE), 2 (MODERADO), 3 (GRAVE) | INT    |
+|  9 | fx       | fratura exposta: 0 (NÃO), 1 (SIM)                           | INT |
+| 10 | queim    | queimadura:0 (NÃO), 1 (LEVE), 2 (MODERADO), 3 (GRAVE) | CAT |
 | 11 | gcs      | [Escala de Coma de Glasgow (3–15)](https://pt.wikipedia.org/wiki/Escala_de_coma_de_Glasgow) |   INT |
-| 12 | avpu     | Estado de consciência: A, V, P, U (Alerta, Voz, Pain (dor), inconsciente | CAT |
-| 13 | tri      | Triagem classif. START: "verde", "amarelo", "vermelho", "preto" | CAT |
+| 12 | avpu     | Estado de consciência: 0 (ALERTA), 1 (VOZ), 2 (PAIN), 3 (INCONSCIENTE) | INT |
+| 13 | tri      | Triagem classif. START: 0 (verde), 1 (amarelo), 2 (vermelho), 3 (preto) | INT |
 | 14 | sobr     | Prob. de sobrevivência (0 a 1)  REAL                    | FLOAT |
 
 <small>
@@ -35,10 +35,10 @@ GCS: de 3 a 15, quanto menor o valor, menos grave a situação da vítima
 
 | Classificação START | Faixa de probabilidade de sobrevivência |
 |---------------------|-----------------------------------------|
-| Verde               | [0.93 – 1.00]                           |
-| Amarelo             | [0.75 – 0.95]                           |
-| Vermelho            | [0.15 – 0.80]                           |
-| Preto               | [0.00 – 0.25]                           |
+| 0: Verde               | [0.93 – 1.00]                           |
+| 1: Amarelo             | [0.75 – 0.95]                           |
+| 2: Vermelho            | [0.15 – 0.80]                           |
+| 3: Preto               | [0.00 – 0.25]                           |
 
 
 ---
