@@ -15,7 +15,7 @@
 |  7 | pr       | pulso radial: 0 (NÃO), 1 (SIM)                        | INT    |
 |  8 | sg       | sangramento: 0 (NÃO), 1 (LEVE), 2 (MODERADO), 3 (GRAVE) | INT    |
 |  9 | fx       | fratura exposta: 0 (NÃO), 1 (SIM)                           | INT |
-| 10 | queim    | queimadura:0 (NÃO), 1 (LEVE), 2 (MODERADO), 3 (GRAVE) | CAT |
+| 10 | queim    | queimadura: 0 (NÃO), 1 (LEVE), 2 (MODERADO), 3 (GRAVE) | CAT |
 | 11 | gcs      | [Escala de Coma de Glasgow (3–15)](https://pt.wikipedia.org/wiki/Escala_de_coma_de_Glasgow) |   INT |
 | 12 | avpu     | Estado de consciência: 0 (ALERTA), 1 (VOZ), 2 (PAIN), 3 (INCONSCIENTE) | INT |
 | 13 | tri      | Triagem classif. START: 0 (verde), 1 (amarelo), 2 (vermelho), 3 (preto) | INT |
