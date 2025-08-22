@@ -28,7 +28,7 @@ import os
 # ------------------------
 # Configurações de Paths
 # ------------------------
-BASE = Path("../../datasetS/vict/100v")
+BASE = Path("../datasetS/vict/100v")
 INPUT = BASE / "data.csv"
 OUTDIR = BASE / "relatorios"
 FIGDIR    = OUTDIR / "figs"

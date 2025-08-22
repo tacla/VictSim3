@@ -24,7 +24,7 @@ from scipy.stats import chi2_contingency
 # ------------------------
 # CONFIGURAÇÕES
 # ------------------------
-BASE = Path("../../datasets/vict/100v")  # Ajuste o caminho base
+BASE = Path("../datasets/vict/100v")  # Ajuste o caminho base
 INPUT = os.path.join(BASE, "data.csv")
 OUTDIR = os.path.join(BASE, "relatorios")
 FIGDIR = os.path.join(OUTDIR, "figs")

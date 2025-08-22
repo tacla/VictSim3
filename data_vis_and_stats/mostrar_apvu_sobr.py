@@ -7,7 +7,9 @@ from scipy import stats
 # =============================
 # CONFIGURAÇÕES DE PASTA
 # =============================
-BASE = Path("../../datasets/vict/100v")
+
+
+BASE = Path("../datasets/vict/100v")
 INPUT = BASE / "data.csv"
 OUTDIR = BASE / "relatorios"
 FIGDIR = OUTDIR / "figs"
@@ -135,8 +137,13 @@ def main():
     lines.append("# AVPU × SOBR\n")
     lines.append(f"- **Arquivo**: `{INPUT.name}`")
     lines.append(f"- **Linhas válidas p/ análise**: {len(df_ok)}\n")
-    lines.append(f"- **Eta (razão de correlação)**: {eta:.4f}")
+    lines.append(f"- **Eta (razão de correlação)**: {eta:.4f}\n")
+    lines.append(f"  Eta mede quanto da variabilidade total de uma variável numérica pode ser explicada por uma variável categórica.\n")
+    lines.append(f"  Valores próximos de 0 indicam associação fraca e quanto mais próximos de 1, mais forte.")
     lines.append(f"- **ANOVA**: F={f_stat:.4f}, p={p_val:.4g}\n")
+    lines.append(f"  Mede se as médias da variável numérica são significativamente diferentes para os valores da variável categórica.\n")
+    lines.append(f"  p < 0,05 → rejeita-se H₀ → existe diferença estatisticamente significativa entre as médias.\n")
+    lines.append(f"  p ≥ 0,05 → não há evidência suficiente para rejeitar H₀ → médias podem ser consideradas estatisticamente iguais.")
     if na_count > 0:
         lines.append(f"- **Ausentes em AVPU**: {na_count}")
     if unexpected:
