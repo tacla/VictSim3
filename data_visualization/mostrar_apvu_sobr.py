@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
 """
 Análise da relação entre AVPU (categórica) e SOBR (numérica)
 
@@ -158,3 +155,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
