@@ -4,8 +4,13 @@
 - **Linhas válidas p/ análise**: 100
 
 - **Eta (razão de correlação)**: 0.8910
+  Eta mede quanto da variabilidade total de uma variável numérica pode ser explicada por uma variável categórica
+  Valores próximos de 0 indicam associação fraca e quanto mais próximos de 1, mais forte
 - **ANOVA**: F=123.2839, p=8.329e-33
 
+  Mede se as médias da variável numérica são significativamente diferentes para os valores da variável categórica
+  p < 0,05 → rejeita-se H₀ → existe diferença estatisticamente significativa entre as médias.
+  p ≥ 0,05 → não há evidência suficiente para rejeitar H₀ → médias podem ser consideradas estatisticamente iguais.
 
 ## Estatísticas por categoria
 | avpu   |   N |   mean |   std |   ci95_lo |   ci95_hi |
