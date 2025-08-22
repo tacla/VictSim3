@@ -13,7 +13,7 @@ com o resumo estatístico dos atributos:
    - Mínimo
    - Máximo
    - Média
-3. Para colunas categóricas conhecidas:
+3. Para colunas categóricas conhecidas (todas no formato int):
    - Contagem absoluta e percentual de cada valor esperado (mesmo que seja 0)
    - Contagem e percentual de valores ausentes (<NA>)
    - Contagem e percentual de valores inesperados (fora do domínio)
@@ -40,19 +40,19 @@ import pandas as pd
 import numpy as np
 
 # === Configurações fixas ===
-BASE_FOLDER = Path("../datasets/vict/100v")
+BASE_FOLDER = Path(".")
 INPUT_CSV   = BASE_FOLDER / "data.csv"
 OUTPUT_MD   = BASE_FOLDER / "summary.md"
 
 # Esquema conhecido (ordem preservada nos conjuntos)
 CAT_DOMAINS = {
 
-    "pr":    ["S", "N"],
-    "queim": ["N", "L", "M", "G"],
-    "fx":    ["S", "N"],
-    "sg":    ["N", "L", "M", "G"],
-    "avpu":  ["A", "V", "P", "U"],
-    "tri":   ["verde", "amarelo", "vermelho", "preto"],  
+    "pr":    [0, 1],
+    "queim": [0, 1, 2, 3],
+    "fx":    [0, 1],
+    "sg":    [0, 1, 2, 3],
+    "avpu":  [0, 1, 2, 3],
+    "tri":   [0, 1, 2, 3],  
 }
 
 NUM_INT_COLS   = ["idade", "fc", "fr", "pas", "spo2", "gcs"]
@@ -72,8 +72,7 @@ def read_and_cast(path: Path) -> pd.DataFrame:
     # Normaliza categóricos (tri minúsculas; demais maiúsculas)
     for c, _ in CAT_DOMAINS.items():
         if c in df.columns:
-            s = df[c].astype("string").str.strip()
-            df[c] = s.str.lower() if c == "tri" else s.str.upper()
+            df[c] = pd.to_numeric(df[c], errors="coerce").astype("Int64")
     return df
 
 def numeric_section(df: pd.DataFrame) -> str:
