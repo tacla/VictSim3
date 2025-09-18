@@ -8,8 +8,8 @@
 |----|----------|-------------------------------------------------------|--------|
 |  1 | idade    | Idade da vítima (entre 1 e 90 anos)                   | INT    |
 |  2 | fc       | Frequência cardíaca (bpm) de 0 a 160                  | INT    |
-|  3 | fr       | Frequência respiratória (rpm) de 0 a 45               | INT    |
-|  4 | pas      | Pressão arterial sistólica (mmHg)                     | INT    |                  
+|  3 | fr       | Frequência respiratória (rpm) de 0 a 50               | INT    |
+|  4 | pas      | Pressão arterial sistólica (mmHg) de 0 a 200          | INT    |                  
 |  5 | spo2     | Saturação de oxigênio (%)   de 0 a 100                | INT    |     
 |  6 | temp     | Temperatura corporal (°C)  de 0 a 38.5                | FLOAT  |
 |  7 | pr       | pulso radial: 0 (NÃO), 1 (SIM)                        | INT    |
