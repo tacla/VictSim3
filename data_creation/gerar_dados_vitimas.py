@@ -136,11 +136,11 @@ def gerar_dataset_vitimas(n_vitimas=100, media_idade=35, desvio_idade=5,
 def main():
     # você pode alterar os parâmetros conforme necessário
     df = gerar_dataset_vitimas(
-        n_vitimas=1000,
+        n_vitimas=100,
         media_idade=40,
-        desvio_idade=30,
+        desvio_idade=3,
         tipo_acidente="uniforme",
-        nivel_ruido=0.08
+        nivel_ruido=0.01
     )
     print("\nPrimeiras linhas do dataset gerado:")
     print(df.head())
