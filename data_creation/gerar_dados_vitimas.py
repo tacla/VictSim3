@@ -4,8 +4,14 @@ import random
 import matplotlib.pyplot as plt
 from collections import Counter
 
-def gerar_dataset_vitimas(n_vitimas=100, media_idade=35, desvio_idade=7,
-                          tipo_acidente="aereo", nivel_ruido=0.05):
+# === Configurações fixas ===
+from pathlib import Path
+BASE_FOLDER = Path("../datasets/vict/1000v")
+OUTPUT_CSV   = BASE_FOLDER / "data.csv"
+
+
+def gerar_dataset_vitimas(n_vitimas=100, media_idade=35, desvio_idade=5,
+                          tipo_acidente="aereo", nivel_ruido=0.02, seed=None):
     """
     Gera dataset sintético de vítimas com ruído configurável.
     
@@ -13,18 +19,25 @@ def gerar_dataset_vitimas(n_vitimas=100, media_idade=35, desvio_idade=7,
                  0 -> sem ruído, 1 -> ruído máximo permitido.
                  Também define probabilidade de erro em AVPU e TRI.
     """
-    np.random.seed(42)
-    random.seed(42)
+    if seed is not None:
+        np.random.seed(seed)
+        random.seed(seed)
 
+    # porcentual de vitimas por tipo:
+    # 0 (verde), 1 (amarelo), 2 (vermelho), 3 (preto)
     dist_tri_por_tipo = {
         'aereo': {0: 0.2, 1: 0.3, 2: 0.4, 3: 0.1},
         'rodoviario': {0: 0.4, 1: 0.3, 2: 0.2, 3: 0.1},
         'ferroviario': {0: 0.3, 1: 0.3, 2: 0.3, 3: 0.1},
-        'deslizamento': {0: 0.25, 1: 0.25, 2: 0.3, 3: 0.2}
+        'deslizamento': {0: 0.25, 1: 0.25, 2: 0.3, 3: 0.2},
+        'uniforme': {0: 0.25, 1: 0.25, 2: 0.25, 3:0.25}
     }
 
-    faixas_fuzzy = {0:(0.93,1.0),1:(0.75,0.95),2:(0.15,0.8),3:(0.0,0.25)}
+    # faixas de probabilidade de sobrevivence em funcao do tipo
+    faixas_fuzzy = {0:(0.90,1.0),1:(0.75,0.95),2:(0.15,0.8),3:(0.0,0.25)}
 
+    # faixas de valores ou valores para os atributos em funcao do estado
+    # de triagem
     triagem_parametros = {
         0: {'fc': (60,100), 'fr':(12,20), 'pas':(110,130), 'spo2':(96,100),
             'gcs':(15,15), 'avpu':[0], 'temp':(36.5,37.4), 'pr':[1],
@@ -65,7 +78,7 @@ def gerar_dataset_vitimas(n_vitimas=100, media_idade=35, desvio_idade=7,
 
         # --- Numéricas ---
         registro = {
-            'idade': ruido_int(idade, 0, 90),
+            'idade': ruido_int(idade, 1, 90),
             'fc': ruido_int(np.random.randint(*params['fc']) if params['fc']!=(0,0) else 0, 0, 200),
             'fr': ruido_int(np.random.randint(*params['fr']) if params['fr']!=(0,0) else 0, 0, 50),
             'pas': ruido_int(np.random.randint(*params['pas']) if params['pas']!=(0,0) else 0, 0, 200),
@@ -98,8 +111,8 @@ def gerar_dataset_vitimas(n_vitimas=100, media_idade=35, desvio_idade=7,
         dados.append(registro)
 
     df = pd.DataFrame(dados)
-    df.to_csv("data_ruido_avpu_tri.csv", index=False)
-    print("\nDataset salvo como data_ruido_avpu_tri.csv")
+    df.to_csv(OUTPUT_CSV, index=False)
+    print(f"\nDataset salvo como {OUTPUT_CSV}")
 
     cores = {0:'verde',1:'amarelo',2:'vermelho',3:'preto'}
     contagem = Counter(df['tri'])
@@ -119,3 +132,18 @@ def gerar_dataset_vitimas(n_vitimas=100, media_idade=35, desvio_idade=7,
     plt.show()
 
     return df
+
+def main():
+    # você pode alterar os parâmetros conforme necessário
+    df = gerar_dataset_vitimas(
+        n_vitimas=1000,
+        media_idade=40,
+        desvio_idade=30,
+        tipo_acidente="uniforme",
+        nivel_ruido=0.08
+    )
+    print("\nPrimeiras linhas do dataset gerado:")
+    print(df.head())
+
+if __name__ == "__main__":
+    main()
