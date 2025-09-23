@@ -7,19 +7,19 @@ Este exemplo apresenta um agente explorador que caminha aleatoriamente pelo ambi
 - copie a pasta 'vs' para dentro da 'pasta'
 
 Você deverá obter esta estrutura:
-- pasta
-  - main.py
-  - rescuer.py
-  - explorer.py
-  - config_ag
-    - explorer_1.txt    # configuração para o explorador 1
-    - rescuer_1.txt     # configuração para o socorrista 1
-  - vs
-    - abstract_agent.py
-    - constants.py
-    - environment.py
-    - physical_agent.py
-- datasets
+### pasta
+- main.py
+- rescuer.py
+- explorer.py
+- config_ag
+  - explorer_1.txt    # configuração para o explorador 1
+  - rescuer_1.txt     # configuração para o socorrista 1
+- vs
+  - abstract_agent.py
+  - constants.py
+  - environment.py
+  - physical_agent.py
+### datasets
   -  env (arquivos que definem o ambiente)
     - 12x12_10v (grid 12 por 12 com 10 vítimas)
       - env_config.txt (tamanho da janela, do grid, ...)
