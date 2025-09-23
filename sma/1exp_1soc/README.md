@@ -7,7 +7,7 @@ Este exemplo apresenta um agente explorador que caminha aleatoriamente pelo ambi
 - copie a pasta 'vs' para dentro da 'pasta'
 
 Você deverá obter esta estrutura:
-### pasta
+### pasta sma
 - main.py
 - rescuer.py
 - explorer.py
