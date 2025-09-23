@@ -8,14 +8,14 @@ Este exemplo apresenta um agente explorador que caminha aleatoriamente pelo ambi
 
 Você deverá obter esta estrutura:
 - pasta
-  -- main.py
---rescuer.py        
---explorer.py
---config_ag
-  ---explorer_1.txt    # configuração para o explorador 1
-  ---escuer_1.txt     # configuração para o socorrista 1
--- vs
---- abstract_agent.py
---- constants.py
---- environment.py
---- physical_agent.py
+  - main.py
+  - rescuer.py
+  - explorer.py
+  - config_ag
+    - explorer_1.txt    # configuração para o explorador 1
+    - rescuer_1.txt     # configuração para o socorrista 1
+  - vs
+    - abstract_agent.py
+    - constants.py
+    - environment.py
+    - physical_agent.py
