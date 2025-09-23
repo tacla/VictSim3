@@ -20,11 +20,11 @@ Você deverá obter esta estrutura:
   - environment.py
   - physical_agent.py
 ### datasets
-  -  env (arquivos que definem o ambiente)
-    - 12x12_10v (grid 12 por 12 com 10 vítimas)
-      - env_config.txt (tamanho da janela, do grid, ...)
-      - env_obst.txt (posições dos obstáculos)
-      - env_victims.txt (posições das vítimas)
-  -  vic (datasets com os sinais vitais das vítimas)
-    - 10v
-      - data.csv
+#### env (arquivos que definem o ambiente)
+- 12x12_10v (grid 12 por 12 com 10 vítimas)
+  - env_config.txt (tamanho da janela, do grid, ...)
+  - env_obst.txt (posições dos obstáculos)
+  - env_victims.txt (posições das vítimas)
+#### vic (datasets com os sinais vitais das vítimas)
+- 10v
+  - data.csv
