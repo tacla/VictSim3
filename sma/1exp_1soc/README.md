@@ -19,3 +19,6 @@ Você deverá obter esta estrutura:
     - constants.py
     - environment.py
     - physical_agent.py
+- datasets
+  -  env (arquivos que definem o ambiente)
+  -  vic (datasets com os sinais vitais das vítimas)
