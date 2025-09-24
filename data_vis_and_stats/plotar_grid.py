@@ -20,20 +20,47 @@ import math
 import csv
 import sys
 
+def load_env_config(filepath="env_config.txt"):
+    config = {}
+    with open(filepath, "r") as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith("#"):  # ignora linhas vazias ou comentários
+                continue
+            key, value = line.split(maxsplit=1)
+            config[key] = value
+
+    # Converte os valores conforme necessário
+    R = int(config["GRID_HEIGHT"])
+    C = int(config["GRID_WIDTH"])
+
+    # BASE no formato "x,y"
+    base_x, base_y = config["BASE"].split(",")
+    base_c = int(base_x)
+    base_r = int(base_y)
+
+    W = int(config["WINDOW_WIDTH"])
+    H = int(config["WINDOW_HEIGHT"])
+
+    return R, C, base_c, base_r, W, H
+
+
+# MAIIN
+if __name__ == "__main__":
+    R, C, base_c, base_r, W, H = load_env_config("env_config.txt")
+    print(f"R={R}, C={C}, base_c={base_c}, base_r={base_r}, W={W}, H={H}")
+
 # Input files and parameters - to be set
 data_folder = "."
+env_file = "env_config.txt"
 obst_file = "env_obst.txt"                        # the program concatenates data_folder + obst_file                      
 victims_file = "env_victims.txt"                  # the program concatenates data_folder + victims_file
-R = 100                                           # define the number of rows of the grid
-C = 100                                           # define the number of columbs of the grid
-WIDTH = 700                                       # define the window width in pixels
-HEIGHT = 700                                      # define the window height in pixels
+
+R, C, base_c, base_r, WIDTH, HEIGHT = load_env_config(env_file)
 
 # initial settings
 CELLW = WIDTH/C
 CELLH = HEIGHT/R
-base_c = 0
-base_r = 0
 base_coords = (base_c, base_r)
 
 # Define colors
