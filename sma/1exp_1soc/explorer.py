@@ -68,9 +68,9 @@ class Explorer(AbstAgent):
         dx, dy = self.get_next_position()
 
         # Moves the explorer agent to another position
-        rtime_bef = self.get_rtime()   // get remaining batt time before the move
+        rtime_bef = self.get_rtime()   ## get remaining batt time before the move
         result = self.walk(dx, dy)
-        rtime_aft = self.get_rtime()   // get remaining batt time after the move
+        rtime_aft = self.get_rtime()   ## get remaining batt time after the move
 
         # Test the result of the walk action
         # It should never bump, since get_next_position always returns a valid position...
@@ -94,9 +94,9 @@ class Explorer(AbstAgent):
             seq = self.check_for_victim()
             if seq != VS.NO_VICTIM:
                 vs = self.read_vital_signals()
-                self.victims[vs[0]] = ((self.x, self.y), vs)
+                self.victims[seq] = ((self.x, self.y), vs)
                 print(f"{self.NAME} Victim found at ({self.x}, {self.y}), rtime: {self.get_rtime()}")
-                #print(f"{self.NAME} Seq: {seq} Vital signals: {vs}")
+                print(f"{self.NAME} Seq: {seq} Vital signals: {vs}")
             
             # Calculates the difficulty of the visited cell
             difficulty = (rtime_bef - rtime_aft)
@@ -112,15 +112,20 @@ class Explorer(AbstAgent):
         return
 
     def come_back(self):
+        """ Procedure to return to the base: pops the walk_stack to follow 
+        """ the exploration path in the opposite direction
+        
         dx, dy = self.walk_stack.pop()
         dx = dx * -1
         dy = dy * -1
 
         result = self.walk(dx, dy)
+        # Walk resulted in bumping into a wall or end of grid
         if result == VS.BUMPED:
             print(f"{self.NAME}: when coming back bumped at ({self.x+dx}, {self.y+dy}) , rtime: {self.get_rtime()}")
             return
-        
+            
+        # Walk succeded
         if result == VS.EXECUTED:
             # update the agent's position relative to the origin
             self.x += dx
@@ -147,5 +152,6 @@ class Explorer(AbstAgent):
 
         self.come_back()
         return True
+
 
 
