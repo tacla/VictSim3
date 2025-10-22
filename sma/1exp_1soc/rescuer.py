@@ -5,13 +5,8 @@
 ### to the base when it enters into a dead end position
 
 
-import os
-import random
-from map import Map
 from vs.abstract_agent import AbstAgent
-from vs.physical_agent import PhysAgent
 from vs.constants import VS
-from abc import ABC, abstractmethod
 
 
 ## Classe que define o Agente Rescuer com um plano fixo
@@ -46,20 +41,20 @@ class Rescuer(AbstAgent):
         victims' location. The rescuer becomes ACTIVE. From now,
         the deliberate method is called by the environment"""
 
-        print(f"\n\n*** R E S C U E R ***")
+        print("\n\n*** R E S C U E R ***")
         self.map = map
         print(f"{self.NAME} Map received from the explorer")
         self.map.draw()
 
         print()
-        #print(f"{self.NAME} List of found victims received from the explorer")
+        print(f"{self.NAME} List of found victims received from the explorer")
         self.victims = victims
 
         # print the found victims - you may comment out
-        #for seq, data in self.victims.items():
-        #    coord, vital_signals = data
-        #    x, y = coord
-        #    print(f"{self.NAME} Victim seq number: {seq} at ({x}, {y}) vs: {vital_signals}")
+        for seq, data in self.victims.items():
+            coord, vital_signals = data
+            x, y = coord
+            print(f"{self.NAME} Victim {seq} at ({x}, {y}) vs: {vital_signals}")
 
         #print(f"{self.NAME} time limit to rescue {self.plan_rtime}")
 
@@ -149,20 +144,27 @@ class Rescuer(AbstAgent):
         return
     
     def __planner(self):
-        """ A private method that calculates the walk actions in a OFF-LINE MANNER to rescue the
-        victims. Further actions may be necessary and should be added in the
-        deliberata method"""
+        """ A private method that calculates the walk actions in a OFF-LINE 
+        MANNER to rescue the victims. Further actions may be necessary and 
+        should be added in the deliberate method"""
 
-        """ This plan starts at origin (0,0) and chooses the first of the possible actions in a clockwise manner starting at 12h.
-        Then, if the next position was visited by the explorer, the rescuer goes to there. Otherwise, it picks the following possible action.
-        For each planned action, the agent calculates the time will be consumed. When time to come back to the base arrives,
-        it reverses the plan."""
+        """This plan starts at the origin (0, 0) and selects the first possible action
+        in a clockwise manner, starting from the 12 o’clock position.
+        If the next position was visited by the explorer, the rescuer moves there;
+        otherwise, it selects the next possible action in a clockwise manner.
+        For each planned action, the agent calculates the time that will be consumed.
+        When it is time to return to the base, the plan is reversed."""
 
-        # This is a off-line trajectory plan, each element of the list is a pair dx, dy that do the agent walk in the x-axis and/or y-axis.
-        # Besides, it has a flag indicating that a first-aid kit must be delivered when the move is completed.
-        # For instance (0,1,True) means the agent walk to (x+0,y+1) and after walking, it leaves the kit.
 
-        self.plan_visited.add((0,0)) # always start from the base, so it is already visited
+        # This is an offline trajectory plan. Each element in the list is a pair (dx, dy)
+        # that moves the agent along the x-axis and/or y-axis.
+        # Additionally, each element includes a flag indicating whether a first-aid kit
+        # must be delivered after the move is completed.
+        # For example, (0, 1, True) means the agent moves to (x+0, y+1) and then
+        # delivers a kit because there is a victim at that location.
+
+        # always start from the base, so it is already visited
+        self.plan_visited.add((0,0)) 
         difficulty, vic_seq, actions_res = self.map.get((0,0))
         self.__depth_search(actions_res)
 
@@ -173,7 +175,8 @@ class Rescuer(AbstAgent):
         come_back_plan = []
 
         for a in reversed(self.plan):
-            # triple: dx, dy, no victim - when coming back do not rescue any victim
+            # each line of the plan is a triple: dx, dy, no victim 
+            # - when coming back do not rescue any victim
             come_back_plan.append((a[0]*-1, a[1]*-1, False))
 
         self.plan = self.plan + come_back_plan

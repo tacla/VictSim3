@@ -26,6 +26,9 @@ def main(vict_folder, env_folder, config_ag_folder):
 
 
 if __name__ == '__main__':
+    print("------------------")
+    print("--- INICIO SMA ---")
+    print("------------------")
     # dataset com sinais vitais das vitimas
     vict_folder = os.path.join("..", "datasets/vict/", "10v")
 

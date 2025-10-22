@@ -4,11 +4,8 @@
 ### It walks randomly in the environment looking for victims. When half of the
 ### exploration has gone, the explorer goes back to the base.
 
-import sys
-import os
+
 import random
-import math
-from abc import ABC, abstractmethod
 from vs.abstract_agent import AbstAgent
 from vs.constants import VS
 from map import Map
@@ -95,8 +92,8 @@ class Explorer(AbstAgent):
             if seq != VS.NO_VICTIM:
                 vs = self.read_vital_signals()
                 self.victims[seq] = ((self.x, self.y), vs)
-                print(f"{self.NAME} Victim found at ({self.x}, {self.y}), rtime: {self.get_rtime()}")
-                print(f"{self.NAME} Seq: {seq} Vital signals: {vs}")
+                #print(f"{self.NAME} Victim found at ({self.x}, {self.y}), rtime: {self.get_rtime()}")
+                #print(f"{self.NAME} Seq: {seq} Vital signals: {vs}")
             
             # Calculates the difficulty of the visited cell
             difficulty = (rtime_bef - rtime_aft)
@@ -112,9 +109,9 @@ class Explorer(AbstAgent):
         return
 
     def come_back(self):
-        """ Procedure to return to the base: pops the walk_stack to follow 
-        """ the exploration path in the opposite direction
-        
+        """ Procedure to return to the base: pops the walk_stack to follow
+        the exploration path in the opposite direction """
+  
         dx, dy = self.walk_stack.pop()
         dx = dx * -1
         dy = dy * -1
@@ -133,15 +130,20 @@ class Explorer(AbstAgent):
             #print(f"{self.NAME}: coming back at ({self.x}, {self.y}), rtime: {self.get_rtime()}")
         
     def deliberate(self) -> bool:
-        """ The agent chooses the next action. The simulator calls this
-        method at each cycle. Must be implemented in every agent"""
+        """  The simulator calls this method at each cycle. 
+        Must be implemented in every agent. The agent chooses the next action.
+        """
 
         consumed_time = self.TLIM - self.get_rtime()
+        
+        # check if it is time to come back to the base      
         if consumed_time < self.get_rtime():
+            # continue to explore
             self.explore()
             return True
 
-        # time to come back to the base
+        # Returning to the base terminates when there are no more moves to pop from the stack
+        # or when the agent reaches (0, 0) — the base position
         if self.walk_stack.is_empty() or (self.x == 0 and self.y == 0):
             # time to wake up the rescuer
             # pass the walls and the victims (here, they're empty)
@@ -150,6 +152,7 @@ class Explorer(AbstAgent):
             self.resc.go_save_victims(self.map, self.victims)
             return False
 
+        # move to the base
         self.come_back()
         return True
 
