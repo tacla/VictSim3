@@ -5,7 +5,7 @@ As classes concretas devem herdar desta classe e implementar o método `delibera
 
 ---
 
-## 🧠 Método Abstrato
+## Método Abstrato
 
 ### `deliberate() -> bool`
 **Descrição:**  
@@ -19,7 +19,7 @@ Cada deliberação deve executar **no máximo uma ação de movimento** (`walk`)
 
 ---
 
-## ⚙️ Métodos Públicos
+## Métodos Públicos
 
 ### `get_rtime() -> float`
 **Descrição:**  
