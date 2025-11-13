@@ -2,15 +2,8 @@
 
 ## Indexação do Grid 2D
 
-O ambiente (`Env`) utiliza uma **grade bidimensional (grid)** representada por listas aninhadas em Python:
-
-```python
-self.obst = [[1 for y in range(self.dic["GRID_HEIGHT"])]
-             for x in range(self.dic["GRID_WIDTH"])]
-```
-
-Isso significa que o índice **externo** (`x`) percorre as **colunas**, e o índice **interno** (`y`) percorre as **linhas**.  
-Logo, o acesso `self.obst[x][y]` corresponde à **coluna x** e **linha y**.
+O ambiente (`Env`) utiliza uma **grade bidimensional (grid)** 
+Isso significa que as coordenadas são pares (x, y) tal que x indica uma **coluna** e y uma **linha**.  
 
 - A **posição (0,0)** está localizada no **canto superior esquerdo** da janela.
 - O eixo **x** cresce da **esquerda para a direita**.
@@ -20,10 +13,10 @@ Essa convenção é usada tanto na leitura dos arquivos de configuração (`env_
 
 ---
 
-## ⚙️ Estados Possíveis de um Agente
+## Estados Possíveis de um Agente
 
 Os estados dos agentes são definidos por constantes no módulo `VS` (`constants.py`).  
-A partir do código do simulador (`Env.run`), é possível inferir os seguintes estados e transições:
+O método do simulador (`Env.run`) realiza as transições de estados automaticamente:
 
 | Estado | Descrição | Transição para |
 |--------|------------|----------------|
@@ -49,41 +42,20 @@ O simulador gera duas categorias principais de estatísticas, controladas pelos 
 ### 1. Estatísticas por Agente (`print_results()`)
 
 Para cada agente, são apresentadas:
-- **Tempo consumido** (`TLIM - rtime`)
+- **Tempo consumido** (`TLIM - rtime`), rtime significa tempo remanescente
 - **Vítimas encontradas** (por triagem e probabilidade de sobrevivência)
 - **Vítimas salvas** (idem)
-- Percentuais de cobertura por categoria de gravidade (`Green`, `Yellow`, `Red`, `Black`)
-- Métricas ponderadas por probabilidade de sobrevivência (`Vsg`, `Veg`)
+- Percentuais de vítimas encontradas por categoria de gravidade (`Green`, `Yellow`, `Red`, `Black`)
+- Veg são as vítimas encontradas por ponderadas por categoria de tri
+- Vsg são as vítimas socorridas por ponderadas categoria de tri
 
 ### 2. Estatísticas Acumuladas (`print_acum_results()`)
 
 Consolida os resultados de **todos os agentes**:
-- Número total de vítimas por categoria (`G`, `Y`, `R`, `B`)
+- Número total de vítimas por categoria de tri (`Green`, `Yellow`, `Red`, `Black`)
 - Soma total das probabilidades de sobrevivência (`SSOBR`)
 - Vítimas encontradas e salvas por todos os agentes
 - Percentuais e totais ponderados
 - Versão em formato CSV para exportação dos dados
 
 ---
-
-## 🗺️ Resumo Visual
-
-```
-Grid (x,y):
- ↑ y
- |
- | (0,0)──────→ x
- |   Superior Esquerdo
- ↓
-Inferior Direito
-
-Estados do agente:
-IDLE → ACTIVE → ENDED
-             ↘
-              DEAD
-```
-
----
-
-**Autor:** Cesar Tacla (UTFPR)  
-**Data:** Novembro/2025
