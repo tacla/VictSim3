@@ -1,0 +1,7 @@
+    df = gerar_dataset_vitimas(
+        n_vitimas=5000,
+        media_idade=45,
+        desvio_idade=12,
+        tipo_acidente="uniforme",
+        nivel_ruido=0.04
+    )
