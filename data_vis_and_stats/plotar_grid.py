@@ -11,7 +11,10 @@
 ##    lower left | lower right
 ##
 ## To run this program you have to:
-## - set the variables of the section Input files and parameters
+## - set the variables of the section Input files and parameters. Default values below:
+##    env_file = "env_config.txt"
+##    obst_file = "env_obst.txt"                                            
+##    victims_file = "env_victims.txt" 
 
 import pygame
 import os
