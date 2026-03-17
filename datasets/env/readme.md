@@ -5,7 +5,7 @@ Esta pasta contém a definição dos ambientes: os grids com as posições das v
 ## env_config.txt
 | Constante        | Descrição                                                                 |
 |------------------|---------------------------------------------------------------------------|
-| BASE 0,0         | posição da base; (0, 0) é o canto esquerdo superior; (x,y): x=col, y=lin  |
+| BASE 0,0         | posição da base; (0, 0) é o canto esquerdo superior; (x,y): x=col, y=lin; x máximo = GRID_WIDTH - 1 e y máximo = GRID_HEIGHT - 1 |
 | GRID_WIDTH 12    | largura do grid                                                           |
 | GRID_HEIGHT 12   | altura do grid                                                            |
 | WINDOW_WIDTH 400 | largura da janela                                                         |
