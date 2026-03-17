@@ -25,6 +25,6 @@ Você deverá obter esta estrutura:
   - env_config.txt (tamanho da janela, do grid, ...)
   - env_obst.txt (posições dos obstáculos)
   - env_victims.txt (posições das vítimas)
-#### vic (datasets com os sinais vitais das vítimas)
+#### vict (datasets com os sinais vitais das vítimas)
 - 10v
   - data.csv
