@@ -1,7 +1,11 @@
 ## Plot grid with walls, obstacles and victims' positions.
 ## Author: Cesar Tacla, 01 July 2025
 ##
-## Read the obstacles file and the victims' coordinates file and plot the 2D grid.
+## Read the obstacles file and the victims' coordinates file and plot the 2D
+## grid. Victims are plotted sequentially and represented by their sequential
+## numbers starting from zero, according to the order in the env_victims.txt 
+## file. You can click on any cell to print its (x, y) coordinates in the 
+## console.
 ##
 ## The 2D grid's origin is at the top left corner. Indexation is (column, row).
 ##
@@ -11,33 +15,34 @@
 ##    lower left | lower right
 ##
 ## To run this program you have to:
-## - set the variables of the section Input files and parameters. Default values below:
-##    env_file = "env_config.txt"
-##    obst_file = "env_obst.txt"                                            
-##    victims_file = "env_victims.txt" 
+## - set the variables in the main method. Default values below:
+##    data_folder = "./datasets/20x20_42v"
+##    env_config = "env_config.txt"
+##    env_obst = "env_obst.txt"                                            
+##    env_victims = "env_victims.txt" 
 
 import pygame
-import os
-import random
 import math
 import csv
-import sys
+from pathlib import Path
 
-def load_env_config(filepath="env_config.txt"):
+def distance(p1, p2):
+    return math.sqrt((p2[0] - p1[0]) ** 2 + (p2[1] - p1[1]) ** 2)
+
+
+def load_env_config(env_config):
     config = {}
-    with open(filepath, "r") as f:
+    with open(env_config, "r") as f:
         for line in f:
             line = line.strip()
-            if not line or line.startswith("#"):  # ignora linhas vazias ou comentários
+            if not line or line.startswith("#"):
                 continue
             key, value = line.split(maxsplit=1)
             config[key] = value
 
-    # Converte os valores conforme necessário
     R = int(config["GRID_HEIGHT"])
     C = int(config["GRID_WIDTH"])
 
-    # BASE no formato "x,y"
     base_x, base_y = config["BASE"].split(",")
     base_c = int(base_x)
     base_r = int(base_y)
@@ -48,189 +53,159 @@ def load_env_config(filepath="env_config.txt"):
     return R, C, base_c, base_r, W, H
 
 
-# MAIIN
-if __name__ == "__main__":
-    R, C, base_c, base_r, W, H = load_env_config("env_config.txt")
-    print(f"R={R}, C={C}, base_c={base_c}, base_r={base_r}, W={W}, H={H}")
+def plot_env(env_config, env_obst, env_victims):
 
-# Input files and parameters - to be set
-data_folder = "."
-env_file = "env_config.txt"
-obst_file = "env_obst.txt"                        # the program concatenates data_folder + obst_file                      
-victims_file = "env_victims.txt"                  # the program concatenates data_folder + victims_file
+    # --- LOAD CONFIG ---
+    R, C, base_c, base_r, WIDTH, HEIGHT = load_env_config(env_config)
 
-R, C, base_c, base_r, WIDTH, HEIGHT = load_env_config(env_file)
+    CELLW = WIDTH / C
+    CELLH = HEIGHT / R
+    base_coords = (base_c, base_r)
 
-# initial settings
-CELLW = WIDTH/C
-CELLH = HEIGHT/R
-base_coords = (base_c, base_r)
+    # --- COLORS ---
+    WHITE = (255, 255, 255)
+    BLACK = (0, 0, 0)
+    RED = (255, 0, 0)
+    YEL = (255, 255, 0)
+    CYAN = (0, 255, 255)
+    OBST_COLOR = (200, 255, 255)
 
-# Define colors
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-RED = (255, 0, 0)
-YEL = (255, 255, 0)
-GRAY = (100, 100, 100)
-OBST_COLOR = (200, 255, 255)
+    # --- COUNTERS ---
+    vics_quad = [0] * 4
+    walls_quad = [0] * 4
 
+    # --- PYGAME INIT ---
+    pygame.init()
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption('Grid')
+    screen.fill(WHITE)
 
-def distance(p1, p2):
-    return math.sqrt((p2[0] - p1[0]) ** 2 + (p2[1] - p1[1]) ** 2)
+    # --- DRAW GRID ---
+    for r in range(R):
+        for c in range(C):
+            pygame.draw.rect(screen, (230, 230, 230),
+                             (c * CELLW, r * CELLH, CELLW, CELLH), 1)
 
+    print("\n----------------------------------------")
+    print(f"Total of rows......: {R}")
+    print(f"Total of cols......: {C}")
+    print(f"Total of cells.....: {R*C}")
+    print(f"Base position......: {base_coords}")
 
-# counters
-vics_quad=[0]*4  # victims per quadrant
-walls_quad=[0]*4 # walls per quadrant
-tot_vics=0       # total of victims
-tot_walls=0      # total of walls
+    # --- LOAD WALLS ---
+    wall_coords = []
+    with open(env_obst, 'r') as f:
+        for line in f:
+            col1, col2, col3 = line.strip().split(',')
+            col1, col2, col3 = int(col1), int(col2), float(col3)
 
-        
-# Create Pygame window
-pygame.init()
-font = pygame.font.Font(None, 24)
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption('Grid')
+            if col3 == 100.0:
+                wall_coords.append((col1, col2, BLACK))
+            elif col3 > 0:
+                obst_color = tuple(min(int(x / col3), 240) for x in OBST_COLOR)
+                wall_coords.append((col1, col2, obst_color))
 
-# Fill background with white
-screen.fill(WHITE)
+    tot_walls = len(wall_coords)
 
-# Draw grid cells as unfilled black rectangles
-for r in range(R):
-    for c in range(C):
-        pygame.draw.rect(screen, (230,230,230), (c * CELLW, r * CELLH, CELLW, CELLH), 1)
+    # --- LOAD VICTIMS ---
+    vict_coords = []
+    with open(env_victims, 'r') as csvfile:
+        for row in csv.reader(csvfile):
+            vict_coords.append((int(row[0]), int(row[1])))
 
-print(f"\n----------------------------------------")
-print(f"Total of rows......: {R}")
-print(f"Total of cols......: {C}")
-print(f"Total of cells.....: {R*C}")
-print(f"Base position......: {base_coords}")
+    tot_vics = len(vict_coords)
 
-# Read wall coordinates from file
-wall_coords = []
-with open(os.path.join(data_folder, obst_file), 'r') as f:
-    # Iterate over each line in the file
-    for line in f:
-        # Split the line by commas and convert each element to the appropriate type
-        columns = line.strip().split(',')
-        col1 = int(columns[0])
-        col2 = int(columns[1])
-        col3 = float(columns[2])
-        
-        # Check if the last column is equal to 100 = wall
-        if col3 == 100.0:
-            # Append the first two columns to the filtered_lines list
-            wall_coords.append((col1, col2, BLACK))
-        elif col3 > 0:
-            obst_color = tuple(min(int(x/col3), 240) for x in OBST_COLOR)
-            wall_coords.append((col1, col2, obst_color))
+    # --- DRAW BASE ---
+    pygame.draw.rect(screen, CYAN,
+                     (base_c * CELLW, base_r * CELLH, CELLW, CELLH))
 
-# Print the filtered lines
-#print(wall_coords)
-tot_walls = len(wall_coords)
+    # --- DRAW WALLS ---
+    for c, r, color in wall_coords:
+        pygame.draw.rect(screen, color,
+                         (c * CELLW, r * CELLH, CELLW, CELLH))
 
-# Read the victims' coordinates
-vict_coords = []
-with open(os.path.join(data_folder, victims_file), 'r') as csvfile:
-    csvreader = csv.reader(csvfile)
-    for row in csvreader:
-        x = int(row[0])
-        y = int(row[1])
-        vict_coords.append((x, y))   # append tuples
-
-tot_vics = len(vict_coords)
-
-
-# Plot the base position as a yellow rectangle
-pygame.draw.rect(screen, YEL, (base_c * CELLW, base_r * CELLH, CELLW, CELLH))
-
-
-
-# Plot walls as filled black rectangles and obstacles in a descending color scale (see OBST_COLOR)
-for c, r, color in wall_coords:
-    pygame.draw.rect(screen, color, (c * CELLW, r * CELLH, CELLW, CELLH))
-    if r < R/2:
-        if c < C/2:
-            walls_quad[0] += 1
+        if r < R / 2:
+            walls_quad[0 if c < C / 2 else 1] += 1
         else:
-            walls_quad[1] += 1
-    else:
-        if c < C/2:
-            walls_quad[2] += 1
-        else:
-            walls_quad[3] += 1
+            walls_quad[2 if c < C / 2 else 3] += 1
 
-print(f"\n----------------------------------------")
-gen_min_c = sys.maxsize
-gen_min_r = sys.maxsize
-gen_max_c = -sys.maxsize - 1
-gen_max_r = -sys.maxsize - 1
+    print("\n----------------------------------------")
+    print(f"Total of obstacles.....: {tot_walls} ({100*tot_walls/(R*C):.1f}%)")
+    print(f"  upper left  quad.: {walls_quad[0]}")
+    print(f"  upper right quad.: {walls_quad[1]}")
+    print(f"  lower left  quad.: {walls_quad[2]}")
+    print(f"  lower right quad.: {walls_quad[3]}")
 
-#print(f"{gen_min_c}, {gen_min_r} : {gen_max_c}, {gen_max_r}")
-mid_c = gen_min_c + (gen_max_c - gen_min_c)/2
-#print(f"mid col {mid_c} = {mid_c * CELLW}")
-mid_r = gen_min_r + (gen_max_r - gen_min_r)/2
-pygame.draw.line(screen, (255,0,0), (mid_c * CELLW, gen_min_r * CELLH), (mid_c * CELLW, gen_max_r * CELLH), 2)
-pygame.draw.line(screen, (255,0,0), (gen_min_c * CELLW, mid_r * CELLH), (gen_max_c * CELLW, mid_r * CELLH), 2)
-pygame.draw.rect(screen, (255,0,0), (gen_min_c * CELLW, gen_min_r * CELLH, (gen_max_c - gen_min_c + 1) * CELLW, (gen_max_r - gen_min_r + 1) * CELLH), 2)
+  
 
+    print("\n------------------------------------------")
+    print(f"Total of victims...: {tot_vics}")
+    print(f"  upper left  quad.: {vics_quad[0]}")
+    print(f"  upper right quad.: {vics_quad[1]}")
+    print(f"  lower left  quad.: {vics_quad[2]}")
+    print(f"  lower right quad.: {vics_quad[3]}")
 
-print(f"\n----------------------------------------")
-print(f"Total of obstacles.....: {tot_walls} ({100*tot_walls/(R*C):.1f}% of the env)")
-print(f"  upper left  quad.: {walls_quad[0]} ({100*walls_quad[0]/tot_walls:.1f}%)")
-print(f"  upper right quad.: {walls_quad[1]} ({100*walls_quad[1]/tot_walls:.1f}%)")
-print(f"  lower left  quad.: {walls_quad[2]} ({100*walls_quad[2]/tot_walls:.1f}%)")
-print(f"  lower right quad.: {walls_quad[3]} ({100*walls_quad[3]/tot_walls:.1f}%)")
+    pygame.display.update()
 
-# Plot victims as circles
-v = 0
-color = RED
-for c, r in vict_coords:
-    v += 1
-    pygame.draw.circle(screen, color, (c * CELLW + CELLW / 2, r * CELLH + CELLH / 2), 0.4*min(CELLW,CELLH))
-    if r < R/2:
-        if c < C/2:
-            vics_quad[0] += 1
-        else:
-            vics_quad[1] += 1
-    else:
-        if c < C/2:
-            vics_quad[2] += 1
-        else:
-            vics_quad[3] += 1
+    # --- PREPARE FONT ---
+    font = pygame.font.SysFont('Arial', int(0.4 * min(CELLW, CELLH)))
 
-print(f"\n------------------------------------------") 
-print(f"Total of victims...: {tot_vics}")
-print(f"  upper left  quad.: {vics_quad[0]} ({100*vics_quad[0]/tot_vics:.1f}%)")
-print(f"  upper right quad.: {vics_quad[1]} ({100*vics_quad[1]/tot_vics:.1f}%)")
-print(f"  lower left  quad.: {vics_quad[2]} ({100*vics_quad[2]/tot_vics:.1f}%)")
-print(f"  lower right quad.: {vics_quad[3]} ({100*vics_quad[3]/tot_vics:.1f}%)")
-
-
-
-     
-
-
-# Update Pygame display
-pygame.display.update()
-
-# Wait for user to close window
-while True:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            quit()
-        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:   ## left click
-            # Get current mouse position
-            x, y = event.pos
-            # Convert mouse position to row and column indices
-            r = int(y / CELLH)
-            c = int(x / CELLW)
-            # Draw row and column coordinates on screen
-            font = pygame.font.SysFont('Arial', int(0.3*min(CELLW,CELLH)))
-            text = font.render(f'({c},{r})', True, RED)
-            text_rect = text.get_rect(center=(x, y))
-            print(f'({c},{r})')
+    # --- MAIN LOOP (RENDERIZAÇÃO COMPLETA A CADA FRAME) ---
+    running = True
+    while running:
+    
+        # --- EVENTOS ---
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+    
+            elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                x, y = event.pos
+                r = int(y / CELLH)
+                c = int(x / CELLW)
+                print(f'({c},{r})')
+    
+        # --- REDESENHA TUDO ---
+        screen.fill(WHITE)
+    
+        # GRID
+        for r in range(R):
+            for c in range(C):
+                pygame.draw.rect(screen, (230, 230, 230),
+                                 (c * CELLW, r * CELLH, CELLW, CELLH), 1)
+    
+        # BASE
+        pygame.draw.rect(screen, CYAN,
+                         (base_c * CELLW, base_r * CELLH, CELLW, CELLH))
+    
+        # WALLS
+        for c, r, color in wall_coords:
+            pygame.draw.rect(screen, color,
+                             (c * CELLW, r * CELLH, CELLW, CELLH))
+    
+        # --- VICTIMS (NUMERADAS) ---
+        for i, (c, r) in enumerate(vict_coords, start=0):
+    
+            text = font.render(str(i), True, RED)
+            text_rect = text.get_rect(
+                center=(c * CELLW + CELLW / 2, r * CELLH + CELLH / 2)
+            )
             screen.blit(text, text_rect)
-            # Update Pygame display
-            pygame.display.update()
+    
+        # --- UPDATE ---
+        pygame.display.flip()
+        
+    pygame.quit()
+    return
+
+
+def main():
+    data_folder = Path('./datasets/env/20x20_42v')
+    env_config = data_folder / "env_config.txt"
+    env_obst = data_folder / "env_obst.txt"
+    env_victims = data_folder / "env_victims.txt"
+    plot_env(env_config, env_obst, env_victims)
+
+
+if __name__ == "__main__":
+    main()
