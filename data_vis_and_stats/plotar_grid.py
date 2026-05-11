@@ -71,7 +71,7 @@ def plot_env(env_config, env_obst, env_victims):
     OBST_COLOR = (200, 255, 255)
 
     # --- COUNTERS ---
-    vics_quad = [0] * 4
+    victs_quad = [0] * 4
     walls_quad = [0] * 4
 
     # --- PYGAME INIT ---
@@ -111,7 +111,20 @@ def plot_env(env_config, env_obst, env_victims):
     vict_coords = []
     with open(env_victims, 'r') as csvfile:
         for row in csv.reader(csvfile):
-            vict_coords.append((int(row[0]), int(row[1])))
+            x = int(row[0])
+            y = int(row[1])
+            if (x < C/2):
+                if (y < R/2):
+                    victs_quad[0] += 1
+                else:
+                    victs_quad[2] += 1
+            else:
+                if (y < R/2):
+                   victs_quad[1] += 1
+                else:
+                   victs_quad[3] += 1
+                    
+            vict_coords.append((x,y))
 
     tot_vics = len(vict_coords)
 
@@ -140,10 +153,10 @@ def plot_env(env_config, env_obst, env_victims):
 
     print("\n------------------------------------------")
     print(f"Total of victims...: {tot_vics}")
-    print(f"  upper left  quad.: {vics_quad[0]}")
-    print(f"  upper right quad.: {vics_quad[1]}")
-    print(f"  lower left  quad.: {vics_quad[2]}")
-    print(f"  lower right quad.: {vics_quad[3]}")
+    print(f"  upper left  quad.: {victs_quad[0]}")
+    print(f"  upper right quad.: {victs_quad[1]}")
+    print(f"  lower left  quad.: {victs_quad[2]}")
+    print(f"  lower right quad.: {victs_quad[3]}")
 
     pygame.display.update()
 
@@ -200,7 +213,7 @@ def plot_env(env_config, env_obst, env_victims):
 
 
 def main():
-    data_folder = Path('./datasets/env/20x20_42v')
+    data_folder = Path('./datasets/env/94x94_408v')
     env_config = data_folder / "env_config.txt"
     env_obst = data_folder / "env_obst.txt"
     env_victims = data_folder / "env_victims.txt"
