@@ -47,14 +47,11 @@ import random
 # =========================
 # CONFIGURAÇÕES
 # =========================
-path_config = "./datasets/env/20x20_42v/"
-path_vict = "./datasets/vict/42v/"
+path_config = "./datasets/env/94x94_408v/"
+path_vict = "./datasets/vict/408v/"
 path_map = "./map/"
-pExplored = 0.95
+pExplored = 1.0
 ocultar_tri_sobr = False
-
-CELLW = 20
-CELLH = 20
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -78,10 +75,13 @@ def read_config():
     prefixo, coordenadas = lines[0].split(maxsplit=1)   # separa "BASE" do resto
     base_x, base_y = map(int, coordenadas.replace(" ", "").split(",")) # elimina espaços em 5,  10 =>5,10
     #base_x, base_y = map(int, base_line[1].split(","))
-    W = int(lines[1].split()[1])
-    H = int(lines[2].split()[1])
-
-    return base_x, base_y, W, H
+    W = int(lines[1].split()[1])   # grid_width
+    H = int(lines[2].split()[1])   # grid_height
+    WINW = int(lines[3].split()[1])   # WINDOW width
+    WINH = int(lines[4].split()[1])   # WINDOW heigth
+    CELLW = WINW/W
+    CELLH = WINH/H
+    return base_x, base_y, W, H, CELLW, CELLH
 
 
 # =========================
@@ -94,6 +94,7 @@ def read_obstacles():
         for row in reader:
             x, y, obst_dif = int(row[0]), int(row[1]), float(row[2])
             obst[(x, y)] = obst_dif
+
     return obst
 
 
@@ -107,6 +108,7 @@ def read_victims():
         for i, row in enumerate(reader):
             x, y = int(row[0]), int(row[1])
             victims[(x, y)] = i
+ 
     return victims
 
 
@@ -125,7 +127,7 @@ def read_vital_signals():
 # GERA MAPA
 # =========================
 def generate_map():
-    base_x, base_y, W, H = read_config()
+    base_x, base_y, W, H, CELLW, CELLH = read_config()
     obst = read_obstacles()
     victims = read_victims()
     header, vital_data = read_vital_signals()
@@ -140,7 +142,7 @@ def generate_map():
 
                 if random.random() > pExplored:
                     continue
-
+ 
                 x_rel = x - base_x
                 y_rel = y - base_y
 
@@ -168,7 +170,7 @@ def plot_map():
 
     pygame.init()
 
-    base_x, base_y, W, H = read_config()
+    base_x, base_y, W, H, CELLW, CELLH = read_config()
     header, _ = read_vital_signals()
 
     screen = pygame.display.set_mode((W * CELLW, H * CELLH))
@@ -238,6 +240,7 @@ def plot_map():
         for (x, y), row in cell_data.items():
         
             id = int(row[3])
+
         
             if id != -1:
         
@@ -261,9 +264,9 @@ def plot_map():
             for y in range(H):
                 pygame.draw.rect(
                     screen,
-                    (80, 80, 80),
+                    (160, 160, 160),
                     (x * CELLW, y * CELLH, CELLW, CELLH),
-                    1
+                    -1
                 )
 
         # --- INSPECTOR ---
