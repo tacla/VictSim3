@@ -444,7 +444,7 @@ class Env:
         print(f"   --------------------------------------")
         print(f"   CSV of nb. total of victims")
         print(f"   G,Y,R,B,SSOBR")
-        print(f"   {self.tri.count(0)},{self.tri.count(1)},{self.tri.count(2)} {self.tri.count(3)},{self.sum_sobr}")
+        print(f"   {self.tri.count(0)},{self.tri.count(1)},{self.tri.count(2)},{self.tri.count(3)},{self.sum_sobr}")
 
         found = []
         for index, agents in enumerate(self.found, start=0):
