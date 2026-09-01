@@ -7,11 +7,11 @@
 | Seq|Variável  | Descrição                                             | Tipo   |
 |----|----------|-------------------------------------------------------|--------|
 |  1 | idade    | Idade da vítima (entre 1 e 90 anos)                   | INT    |
-|  2 | fc       | Frequência cardíaca (bpm) de 0 a 160                  | INT    |
+|  2 | fc       | Frequência cardíaca (bpm) de 0 a 200                  | INT    |
 |  3 | fr       | Frequência respiratória (rpm) de 0 a 50               | INT    |
 |  4 | pas      | Pressão arterial sistólica (mmHg) de 0 a 200          | INT    |                  
 |  5 | spo2     | Saturação de oxigênio (%)   de 0 a 100                | INT    |     
-|  6 | temp     | Temperatura corporal (°C)  de 0 a 38.5                | FLOAT  |
+|  6 | temp     | Temperatura corporal (°C)  de 0 a 41                  | FLOAT  |
 |  7 | pr       | pulso radial: 0 (NÃO), 1 (SIM)                        | INT    |
 |  8 | sg       | sangramento: 0 (NÃO), 1 (LEVE), 2 (MODERADO), 3 (GRAVE) | INT    |
 |  9 | fx       | fratura exposta: 0 (NÃO), 1 (SIM)                           | INT |
