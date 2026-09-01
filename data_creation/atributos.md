@@ -35,7 +35,7 @@ GCS: de 3 a 15, quanto menor o valor, menos grave a situação da vítima
 
 | Classificação START | Faixa de probabilidade de sobrevivência |
 |---------------------|-----------------------------------------|
-| 0: Verde               | [0.93 – 1.00]                           |
+| 0: Verde               | [0.90 – 1.00]                           |
 | 1: Amarelo             | [0.75 – 0.95]                           |
 | 2: Vermelho            | [0.15 – 0.80]                           |
 | 3: Preto               | [0.00 – 0.25]                           |
