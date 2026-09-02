@@ -11,7 +11,7 @@
 |  3 | fr       | Frequência respiratória (rpm) de 0 a 50               | INT    |
 |  4 | pas      | Pressão arterial sistólica (mmHg) de 0 a 200          | INT    |                  
 |  5 | spo2     | Saturação de oxigênio (%)   de 0 a 100                | INT    |     
-|  6 | temp     | Temperatura corporal (°C)  de 0 a 41                  | FLOAT  |
+|  6 | temp     | Temperatura corporal (°C)  de 0 a 43                  | FLOAT  |
 |  7 | pr       | pulso radial: 0 (NÃO), 1 (SIM)                        | INT    |
 |  8 | sg       | sangramento: 0 (NÃO), 1 (LEVE), 2 (MODERADO), 3 (GRAVE) | INT    |
 |  9 | fx       | fratura exposta: 0 (NÃO), 1 (SIM)                           | INT |
