@@ -9,7 +9,7 @@
 |  1 | idade    | Idade da vítima (entre 1 e 90 anos)                   | INT    |
 |  2 | fc       | Frequência cardíaca (bpm) de 0 a 200                  | INT    |
 |  3 | fr       | Frequência respiratória (rpm) de 0 a 50               | INT    |
-|  4 | pas      | Pressão arterial sistólica (mmHg) de 0 a 200          | INT    |                  
+|  4 | pas      | Pressão arterial sistólica (mmHg) de 0 a 220          | INT    |                  
 |  5 | spo2     | Saturação de oxigênio (%)   de 0 a 100                | INT    |     
 |  6 | temp     | Temperatura corporal (°C)  de 0 a 43                  | FLOAT  |
 |  7 | pr       | pulso radial: 0 (NÃO), 1 (SIM)                        | INT    |
@@ -30,15 +30,6 @@ GCS: de 3 a 15, quanto menor o valor, menos grave a situação da vítima
 
 ---
 
-## Probabilidade de Sobrevivência
-
-
-| Classificação START | Faixa de probabilidade de sobrevivência |
-|---------------------|-----------------------------------------|
-| 0: Verde               | [0.90 – 1.00]                           |
-| 1: Amarelo             | [0.75 – 0.95]                           |
-| 2: Vermelho            | [0.15 – 0.80]                           |
-| 3: Preto               | [0.00 – 0.25]                           |
 
 
 ---
