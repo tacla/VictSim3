@@ -28,7 +28,7 @@ import os
 # ------------------------
 # Configurações de Paths
 # ------------------------
-BASE = Path("../datasetS/vict/100v")
+BASE = Path("./datasets/vict/1300v")
 INPUT = BASE / "data.csv"
 OUTDIR = BASE / "relatorios"
 FIGDIR    = OUTDIR / "figs"
@@ -41,7 +41,10 @@ VAR_PAIRS = [
     ("fr", "sobr"),
     ("pas", "sobr"),
     ("spo2", "sobr"),
-    ("gcs", "sobr"),
+    ("temp", "sobr"),
+    ("sg", "sobr"),
+    ("queim", "sobr"),
+    ("tri", "sobr")
 ]
 
 ALPHA = 0.05
