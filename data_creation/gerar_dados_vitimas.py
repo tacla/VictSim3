@@ -11,10 +11,56 @@ import matplotlib.pyplot as plt
 from collections import Counter
 from pathlib import Path
 
-BASE_FOLDER = Path("./datasets/vict/1300v")
+BASE_FOLDER = Path("./datasets/vict/410v")
 BASE_FOLDER.mkdir(parents=True, exist_ok=True)
 OUTPUT_CSV = BASE_FOLDER / "data.csv"
 
+# TODOS OS CENÁRIOS SÃO USADOS PARA GERAR UM UNICO ARQUIVO DE SAÍDA
+# Com ruído=0, a distribuição será exatamente 25% para cada classe
+# Manter ruído entre 0.02 a 0.05, caso contrário as classes ficam muito
+# misturadas, inclusive as que estão em extremos diferentes
+cenarios = [
+
+    {
+        "nome": "criancas",
+        "distrib_tri": {
+            0: 40,
+            1: 40,
+            2: 30,
+            3: 5
+        },
+        "media_idade": 8,
+        "desvio_idade": 4,
+        "nivel_ruido": 0.03
+    },
+
+    {
+        "nome": "adultos",
+        "distrib_tri": {
+            0: 50,
+            1: 50,
+            2: 50,
+            3: 50
+        },
+        "media_idade": 40,
+        "desvio_idade": 12,
+        "nivel_ruido": 0.03
+    },
+
+    {
+        "nome": "idosos",
+        "distrib_tri": {
+            0: 10,
+            1: 15,
+            2: 30,
+            3: 40
+        },
+        "media_idade": 75,
+        "desvio_idade": 8,
+        "nivel_ruido": 0.03
+    }
+
+]
 
 def calcular_sobr_fisiologica(registro, nivel_ruido=0.02):
     """Calcula a probabilidade de sobrevivência (sobr) baseada as entradas de 1 a 10."""
@@ -236,21 +282,95 @@ def gerar_dataset_vitimas(distrib_tri={0: 2500, 1: 2500, 2: 2500, 3: 2500},
         dados.append(registro_ordenado)
 
     df = pd.DataFrame(dados)
-    df.to_csv(OUTPUT_CSV, index=False)
-    print(f"\nDataset salvo com sucesso em: {OUTPUT_CSV}")
+    return df
+
+
+if __name__ == "__main__":
+    dfs = []
+    
+    for cfg in cenarios:
+    
+        # seed específica do cenário
+        seed_cenario = random.randint(
+            0,
+            2**31 - 1
+        )
+    
+        df = gerar_dataset_vitimas(
+            distrib_tri=cfg["distrib_tri"],
+            media_idade=cfg["media_idade"],
+            desvio_idade=cfg["desvio_idade"],
+            nivel_ruido=cfg["nivel_ruido"],
+            seed=seed_cenario
+        )
+    
+        dfs.append(df)
+    
+        print(
+            f"Cenário '{cfg['nome']}' "
+            f"gerado com seed={seed_cenario} "
+            f"({len(df)} vítimas)"
+        )
+    
+    # ======================================
+    # CONCATENAÇÃO
+    # ======================================
+    
+    df_final = pd.concat(
+        dfs,
+        ignore_index=True
+    )
+    
+    # ======================================
+    # SHUFFLE GLOBAL
+    # ======================================
+    
+    seed_shuffle = random.randint(
+        0,
+        2**31 - 1
+    )
+    
+    df_final = (
+        df_final
+        .sample(
+            frac=1,
+            random_state=seed_shuffle
+        )
+        .reset_index(drop=True)
+    )
+    
+    print(
+        f"Shuffle global realizado "
+        f"com seed={seed_shuffle}"
+    )
+    
+    # ======================================
+    # SALVAR CSV FINAL
+    # ======================================
+    
+   
+    df_final.to_csv(OUTPUT_CSV, index=False)
+    tot_vit = len(df_final)
+    
+    print()
+    print(f"Arquivo salvo: {OUTPUT_CSV}")    
+    print(f"Total de vítimas: {tot_vit}")    
+    print(f"Seed do shuffle: {seed_shuffle}")
+
 
     # Exibição das estatísticas
     cores = {0: 'Verde', 1: 'Amarelo', 2: 'Vermelho', 3: 'Preto'}
-    contagem = Counter(df['tri'])
+    contagem = Counter(df_final['tri'])
+    
     print("\nDistribuição final de vítimas por classificação START (após ruído):")
     for k in sorted(contagem.keys()):
-        print(f"  {k} ({cores[k]}): {contagem[k]} ({contagem[k]/n_vitimas*100:.1f}%)")
+        print(f"  {k} ({cores[k]}): {contagem[k]} ({contagem[k]/tot_vit*100:.1f}%)")
     
-    print(f"total de vítimas: {len(df)}")
+    print(f"total de vítimas: {tot_vit}")
 
     # Histograma de Sobrevivência
     plt.figure(figsize=(8, 4.5))
-    plt.hist(df['sobr'], bins=20, color='skyblue', edgecolor='black', weights=np.ones(n_vitimas)/n_vitimas)
+    plt.hist(df_final['sobr'], bins=20, color='skyblue', edgecolor='black', weights=np.ones(tot_vit)/tot_vit)
     plt.title('Distribuição da Probabilidade de Sobrevivência (sobr)')
     plt.xlabel('Probabilidade de Sobrevivência')
     plt.ylabel('% de Vítimas')
@@ -258,25 +378,3 @@ def gerar_dataset_vitimas(distrib_tri={0: 2500, 1: 2500, 2: 2500, 3: 2500},
     plt.grid(True, linestyle='--', alpha=0.6)
     plt.tight_layout()
     plt.show()
-
-    return df
-
-
-if __name__ == "__main__":
-    distribuicao_desejada = {
-        0: 100,  # Verde
-        1: 390,  # Amarelo
-        2: 405,  # Vermelho
-        3: 405   # Preto
-    }
-
-    # Com ruído=0, a distribuição será exatamente 25% para cada classe
-    # Manter ruído entre 0.02 a 0.05, caso contrário as classes ficam muito
-    # misturadas, inclusive as que estão em extremos diferentes
-    df_gerado = gerar_dataset_vitimas(
-        distrib_tri=distribuicao_desejada,
-        media_idade=40,
-        desvio_idade=25,
-        nivel_ruido=0.05,  
-        seed=None
-    )

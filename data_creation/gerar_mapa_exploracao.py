@@ -47,11 +47,11 @@ import random
 # =========================
 # CONFIGURAÇÕES
 # =========================
-path_config = "./datasets/env/94x94_408v/"
-path_vict = "./datasets/vict/408v/"
+path_config = "./datasets/env/75x75_410v/"
+path_vict = "./datasets/vict/410v/"
 path_map = "./map/"
 pExplored = 1.0
-ocultar_tri_sobr = False
+ocultar_tri_sobr = True
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -79,8 +79,8 @@ def read_config():
     H = int(lines[2].split()[1])   # grid_height
     WINW = int(lines[3].split()[1])   # WINDOW width
     WINH = int(lines[4].split()[1])   # WINDOW heigth
-    CELLW = WINW/W
-    CELLH = WINH/H
+    CELLW = WINW // W
+    CELLH = WINH // H
     return base_x, base_y, W, H, CELLW, CELLH
 
 
@@ -173,7 +173,7 @@ def plot_map():
     base_x, base_y, W, H, CELLW, CELLH = read_config()
     header, _ = read_vital_signals()
 
-    screen = pygame.display.set_mode((W * CELLW, H * CELLH))
+    screen = pygame.display.set_mode(( CELLW * W, CELLH * H))
     pygame.display.set_caption("Map Inspector")
 
     cell_data = {}
@@ -264,9 +264,9 @@ def plot_map():
             for y in range(H):
                 pygame.draw.rect(
                     screen,
-                    (160, 160, 160),
+                    (150, 150, 150),
                     (x * CELLW, y * CELLH, CELLW, CELLH),
-                    -1
+                    1
                 )
 
         # --- INSPECTOR ---
