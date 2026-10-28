@@ -10,7 +10,8 @@ plotado por linhas entre as vítimas.
 
 CONFIGURAÇÕES
 1) PATHS para os arquivos de configuração, map e clusters.
-- path_maps: arquivo resultante da exploração do ambiente
+- path_maps: caminho para o arquivo resultante da exploração do ambiente
+- map_file: arquivo contendo o mapa de exploração com tri e sobr (verifique se possuem valores != -1)
 - clusters: arquivos resultantes do agrupamento das vítimas. Também,
           a ordem pode representar o sequenciamento do socorro. Para clusters
           basta configurar a pasta. Todos os arquivos da pasta que iniciam
