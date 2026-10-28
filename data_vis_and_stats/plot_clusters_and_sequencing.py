@@ -30,19 +30,20 @@ import numpy as np
 # =========================
 # CONFIGURAÇÕES DE PATH
 # =========================
-path_config = "./datasets/env/20x20_42v"
-path_vict   = "./datasets/vict/42v"
+path_config = "./datasets/env/75x75_410v"
+path_vict   = "./datasets/vict/410v"
 path_maps   = "./map"
-path_clusters = "./clusters"
+path_clusters = "./clusters/"
+map_file = "map_ground_truth.csv"
 
-PLOTAR_SEQUENCIAMENTO = True
+PLOTAR_SEQUENCIAMENTO = False
 
 # =========================
 # CORES
 # =========================
 WHITE = (255,255,255)
 BLACK = (0,0,0)
-DARK_GRAY = (80,80,80)
+DARK_GRAY = (10,10,10)
 CYAN = (0,255,255)
 
 GREEN = (0,200,0)
@@ -53,7 +54,8 @@ RED = (255,0,0)
 CLUSTER_COLORS = [
     (255,0,255),(0,255,255),(255,128,0),
     (128,0,255),(0,255,128),(255,0,128),
-    (0,128,255),(128,255,0)
+    (0,128,255),(128,255,0),(128,255,128),
+    (0,128,0),(128,0,0),(128,0,128)
 ]
 
 # =========================
@@ -105,7 +107,7 @@ def read_map(config):
     BASE = config["BASE"]
     cells = {}
 
-    with open(os.path.join(path_maps,"map.csv")) as f:
+    with open(os.path.join(path_maps,map_file)) as f:
         reader = csv.reader(f)
         header_map = next(reader)
         for row in reader:
@@ -255,10 +257,10 @@ def run():
                         tri = cell["vitals"]["tri"]
                         color = [GREEN,YELLOW,RED,BLACK][tri]
         
-                        cx = x*cell_w + cell_w//2
-                        cy = y*cell_h + cell_h//2
+                        cx = x*cell_w + cell_w/2
+                        cy = y*cell_h + cell_h/2
         
-                        pygame.draw.circle(screen, color, (cx,cy), min(cell_w,cell_h)//3)
+                        pygame.draw.circle(screen, color, (cx,cy), min(cell_w,cell_h)/3)
         
                         # erro de tri
                         if tri != data_gt[cell["id"]]["tri"]:
@@ -273,8 +275,8 @@ def run():
                     font = pygame.font.SysFont(None, 18)
                     text = font.render("?", True, BLACK)
         
-                    cx = x*cell_w + cell_w//2 - 5
-                    cy = y*cell_h + cell_h//2 - 8
+                    cx = x*cell_w + cell_w/2 - 5
+                    cy = y*cell_h + cell_h/2 - 8
         
                     screen.blit(text, (cx,cy))
         
@@ -324,9 +326,10 @@ def run():
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mx,my = pygame.mouse.get_pos()
+
                 x = mx // cell_w
                 y = my // cell_h
-
+                print(f"click down ({x},{y})")                 
                 if (x,y) in cells:
                     cell = cells[(x,y)]
                     print("\n=== CLICK ===")

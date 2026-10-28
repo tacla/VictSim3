@@ -213,7 +213,7 @@ def plot_env(env_config, env_obst, env_victims):
 
 
 def main():
-    data_folder = Path('./datasets/env/94x94_408v')
+    data_folder = Path('./datasets/env/75x75_410v')
     env_config = data_folder / "env_config.txt"
     env_obst = data_folder / "env_obst.txt"
     env_victims = data_folder / "env_victims.txt"
